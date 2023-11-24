@@ -1,6 +1,6 @@
 const {MongoClient} = require('mongodb')
 async function dbConnection () {
-    const client = new MongoClient('mongodb://127.0.0.1:27017/')
+    const client = new MongoClient(process.env.MONGODB_URL)
     await client.connect()
     console.log('connected to database successfully')
     const db = await client.db('anonymous')
