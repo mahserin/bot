@@ -14,7 +14,7 @@ async function readNew (id) {
     let messages = await collection.find({
         'to.userId' : +id ,
         seen : false}).toArray()
-    // await collection.updateMany({'to.userId' : +id} , {$set : {seen : true}})
+    await collection.updateMany({'to.userId' : +id} , {$set : {seen : true}})
     return messages
 }
 async function findSenderFromMsg (id) {
