@@ -4,8 +4,9 @@ const token = '6725161255:AAFlT_dA3FXEy0wIyUZ2oXdu3Blpu2txvGc'
 const bot = new TelegramBot(token, { polling: true });
 const Users = require('./Models/Users')
 const Messages = require('./Models/Messages')
+let user , mainUser
 bot.onText(/^\/start$/, async msg => {
-    const user = await Users.exist(msg.from.id)
+     user = await Users.exist(msg.from.id)
     if (user) {
         if (user.role === 'ADMIN') {
             bot.sendMessage(msg.chat.id, 'سلام به ربات ناشناس خوش اومدین \n از دکمه های زیر برای خودت لینک بساز و  به اشتراک بذار', {
@@ -40,7 +41,7 @@ bot.onText(/^\/start$/, async msg => {
     }
 })
 bot.onText(/لینک ناشناس من/, async msg => {
-    const user = await Users.exist(msg.from.id)
+     user = await Users.exist(msg.from.id)
     if (user.link == null) {
         let token = Math.floor(Math.random() * 10 ** 8)
         await Users.setToken(msg.from.id, token)
@@ -50,8 +51,7 @@ bot.onText(/لینک ناشناس من/, async msg => {
     bot.sendMessage(msg.chat.id, `لینگ ناشناس شما : \n ${link}`)
 })
 bot.onText(/^\/start \d+$/, async msg => {
-    console.log('/start')
-    let user = await Users.exist(msg.from.id)
+     user = await Users.exist(msg.from.id)
     if (!user) {
         await Users.insertUser({
             userId: msg.from.id,
@@ -64,7 +64,7 @@ bot.onText(/^\/start \d+$/, async msg => {
         user = await Users.exist(msg.from.id)
     }
     let userToken = msg.text.match(/\d+/)[0]
-    let mainUser = await Users.findToken(userToken)
+     mainUser = await Users.findToken(userToken)
     if (mainUser.userId == msg.from.id) {
         bot.sendMessage(msg.chat.id, 'شما نمیتوانید به خودتان پیام ناشناس بدهید')
     } else {
@@ -167,8 +167,8 @@ bot.on('callback_query', async query => {
                         }
 
                     })
-                    let user = await Users.exist(msg.chat.id)
-                    let mainUser = await Messages.findSenderFromMsg(query.data.match(/\d+$/)[0])
+                     user = await Users.exist(msg.chat.id)
+                     mainUser = await Messages.findSenderFromMsg(query.data.match(/\d+$/)[0])
                     bot.on('callback_query', async query => {
                         if (query.data == 'send') {
                             await Messages.insertMessage({
@@ -231,7 +231,7 @@ bot.onText(/^\/who$/, async msg => {
         let reg = msg.reply_to_message
         if (reg) {
             if (reg.reply_markup.inline_keyboard[0][0].callback_data.match(/\d+$/)[0]) {
-                let mainUser = await Users.exist(msg.reply_to_message.reply_markup.inline_keyboard[0][0].callback_data.match(/\d+$/)[0])
+                 mainUser = await Users.exist(msg.reply_to_message.reply_markup.inline_keyboard[0][0].callback_data.match(/\d+$/)[0])
                 bot.sendMessage(msg.from.id, `name : ${mainUser.fName} \n username : @${mainUser.userName} \n userid : ${mainUser.userId} \n link : ${mainUser.link}`)
             }
         }
