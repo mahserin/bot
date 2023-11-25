@@ -5,7 +5,9 @@ const bot = new TelegramBot(token, { polling: true });
 const Users = require('./Models/Users')
 const Messages = require('./Models/Messages')
 let user , mainUser
+console.log('server started successfully')
 bot.onText(/^\/start$/, async msg => {
+    console.log('requested successfully')
      user = await Users.exist(msg.from.id)
     if (user) {
         if (user.role === 'ADMIN') {
